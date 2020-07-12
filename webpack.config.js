@@ -9,7 +9,8 @@ module.exports = {
 	entry: {
 		background: './source/background',
 		options: './source/options',
-		content_scripts: './source/content_scripts'
+		content_scripts: './source/content_scripts',
+		domain: './source/domain'
 	},
 	output: {
 		path: path.join(__dirname, 'distribution'),
