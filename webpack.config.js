@@ -10,7 +10,8 @@ module.exports = {
 		background: './source/background',
 		options: './source/options',
 		content_scripts: './source/content_scripts',
-		domain: './source/domain'
+		site: './source/site',
+		'hot-reload': './source/hot-reload'
 	},
 	output: {
 		path: path.join(__dirname, 'distribution'),

@@ -45,6 +45,7 @@
 	},
 	"dependencies": {
 		"axios": "^0.19.2",
+		"crx-hotreload": "^1.0.4",
 		"url-parse": "^1.4.7",
 		"webext-options-sync": "^0.21.2",
 		"webextension-polyfill": "^0.4.0"

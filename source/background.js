@@ -1,12 +1,7 @@
 let browser = require("webextension-polyfill");
-
-const domain = require('./domain');
-
 const Url = require('url-parse');
-
-let value = domain.getDomainRating('domain3dfre.com');
-
-console.log(value);
+const site = require('./site');
+const badge = require('./badge');
 
 browser.browserAction.onClicked.addListener(tab => {
 	const url = new Url(tab.url);
@@ -28,9 +23,7 @@ browser.tabs.onActivated.addListener(async function (activeInfo) {
 	let tabInfo = await browser.tabs.get(activeInfo.tabId);
 
 	onChange(tabInfo);
-
 });
-
 
 function onChange(tabInfo) {
 
@@ -40,15 +33,13 @@ function onChange(tabInfo) {
 		const regex = /\./g;
 
 		if (url.hostname.search(regex) > 0) {
-			/*
-			domain.setDomainRating(url.hostname, 4);
 
-			domain.getDomainRating(url.hostname).then(function (item) {
-				console.log(item);
-			}, function (error) {
-				console.log(`Error: ${error}`);
+			site.domain = url.hostname;
+
+			site.loadRatingFromServerIfLocalEmpty().then(function (data) {
+				console.log(data);
+				badge.setText(data);
 			});
-			*/
 		}
 	}
 }
