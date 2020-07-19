@@ -1,5 +1,5 @@
-const axios = require('axios');
-const moment = require('moment');
+import axios from 'axios';
+import moment from 'moment';
 
 module.exports = {
 
@@ -32,17 +32,24 @@ module.exports = {
 
 		console.log('getRatingFromServer');
 
-		let response = await axios.get(module.exports.api_url + module.exports.domain);
+		const url = module.exports.api_url + module.exports.domain;
 
-		if (module.exports.isEmpty(response.data.data[0]))
-			return 0;
-		else
-			return {
-				"rating": response.data.data[0].rating,
-				"rating_color": {
-					"hex": response.data.data[0].rating_color.hex
-				}
-			};
+		return await axios.get(url).then(function (response) {
+
+			if (module.exports.isEmpty(response.data.data[0]))
+				return 0;
+			else
+				return {
+					"rating": response.data.data[0].rating,
+					"rating_color": {
+						"hex": response.data.data[0].rating_color.hex
+					}
+				};
+
+		}).catch(function (error) {
+			console.log(error.message);
+			return false;
+		});
 	},
 
 	updateLocalRating: async () => {
@@ -51,23 +58,26 @@ module.exports = {
 
 		let data = await module.exports.getRatingFromServer();
 
-		await module.exports.setDomainRating(data);
+		if (data !== false) {
+			await module.exports.setDomainRating(data);
+		}
 	},
 
 	getRatingFromLocalStorage: async () => {
 		console.log('getRatingFromLocalStorage');
+
 		let promise = await browser.storage.local.get(module.exports.domain);
 
 		if (promise[module.exports.domain] === undefined)
+			return undefined;
+
+		if (promise[module.exports.domain].data === undefined)
 			return undefined;
 
 		if (promise[module.exports.domain].timestamp === undefined)
 			return undefined;
 
 		if (module.exports.isExpired(promise[module.exports.domain].timestamp))
-			return undefined;
-
-		if (promise[module.exports.domain].data === undefined)
 			return undefined;
 
 		return promise[module.exports.domain].data;

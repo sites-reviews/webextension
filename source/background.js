@@ -36,8 +36,11 @@ function currentTabHasChanged(tabInfo) {
 
 			site.domain = url.hostname;
 
+			badge.setText();
+
 			site.loadRatingFromServerIfLocalEmpty().then(function (data) {
 				console.log(data);
+
 				badge.setText(data);
 
 				browser.browserAction.setTitle({

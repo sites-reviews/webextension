@@ -8,7 +8,6 @@ module.exports = {
 	stats: 'errors-only',
 	entry: {
 		background: './source/background',
-		options: './source/options',
 		content_scripts: './source/content_scripts',
 		site: './source/site',
 		'hot-reload': './source/hot-reload'
@@ -33,14 +32,20 @@ module.exports = {
 	optimization: {
 		minimizer: [
 			new TerserPlugin({
+				extractComments: true,
+				cache: true,
+				parallel: true,
+				sourceMap: true, // Must be set to true if using source-maps in production
 				terserOptions: {
-					mangle: false,
-					compress: false,
-					output: {
-						beautify: true,
-						indent_level: 2 // eslint-disable-line camelcase
+					mangle: true,
+					extractComments: 'all',
+					compress: {
+						drop_console: true,
 					},
-					drop_console: true
+					output: {
+						beautify: false,
+						indent_level: 2 // eslint-disable-line camelcase
+					}
 				}
 			})
 		]

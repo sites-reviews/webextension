@@ -1,54 +1,57 @@
-const filesInDirectory = dir => new Promise (resolve =>
+if (chrome.runtime.getPackageDirectoryEntry !== undefined)
+{
+	const filesInDirectory = dir => new Promise (resolve =>
 
-	dir.createReader ().readEntries (entries =>
+		dir.createReader ().readEntries (entries =>
 
-		Promise.all (entries.filter (e => e.name[0] !== '.').map (e =>
+			Promise.all (entries.filter (e => e.name[0] !== '.').map (e =>
 
-			e.isDirectory
-				? filesInDirectory (e)
-				: new Promise (resolve => e.file (resolve))
-		))
-			.then (files => [].concat (...files))
-			.then (resolve)
+				e.isDirectory
+					? filesInDirectory (e)
+					: new Promise (resolve => e.file (resolve))
+			))
+				.then (files => [].concat (...files))
+				.then (resolve)
+		)
 	)
-)
 
-const timestampForFilesInDirectory = dir =>
-	filesInDirectory (dir).then (files =>
-		files.map (f => f.name + f.lastModifiedDate).join ())
+	const timestampForFilesInDirectory = dir =>
+		filesInDirectory (dir).then (files =>
+			files.map (f => f.name + f.lastModifiedDate).join ())
 
-const reload = () => {
+	const reload = () => {
 
-	chrome.tabs.query ({ active: true, currentWindow: true }, tabs => { // NB: see https://github.com/xpl/crx-hotreload/issues/5
+		chrome.tabs.query ({ active: true, currentWindow: true }, tabs => { // NB: see https://github.com/xpl/crx-hotreload/issues/5
 
-		if (tabs[0]) { chrome.tabs.reload (tabs[0].id) }
+			if (tabs[0]) { chrome.tabs.reload (tabs[0].id) }
 
-		chrome.runtime.reload ()
-	})
-}
+			chrome.runtime.reload ()
+		})
+	}
 
-const watchChanges = (dir, lastTimestamp) => {
+	const watchChanges = (dir, lastTimestamp) => {
 
-	timestampForFilesInDirectory (dir).then (timestamp => {
+		timestampForFilesInDirectory (dir).then (timestamp => {
 
-		if (!lastTimestamp || (lastTimestamp === timestamp)) {
+			if (!lastTimestamp || (lastTimestamp === timestamp)) {
 
-			setTimeout (() => watchChanges (dir, timestamp), 1000) // retry after 1s
+				setTimeout (() => watchChanges (dir, timestamp), 1000) // retry after 1s
 
-		} else {
+			} else {
 
-			reload ()
-		}
-	})
+				reload ()
+			}
+		})
 
-}
+	}
 
-chrome.management.getSelf (self => {
+	chrome.management.getSelf (self => {
 
 		console.log(self.installType);
 
-	if (self.installType === 'development') {
+		if (self.installType === 'development') {
 
-		chrome.runtime.getPackageDirectoryEntry (dir => watchChanges (dir))
-	}
-})
+			chrome.runtime.getPackageDirectoryEntry (dir => watchChanges (dir))
+		}
+	})
+}
