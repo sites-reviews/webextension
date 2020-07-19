@@ -1,0 +1,22 @@
+{
+	"extensionName": {
+		"message": "Sites-reviews.com - rating and reviews about sites",
+		"description": "Name of the extension."
+	},
+
+	"extensionDescription": {
+		"message": "Shows the average site or company rating in the browser",
+		"description": "Description of the extension."
+	},
+
+	"clickButtonToReadOrWriteReviews": {
+		"message": "Click here to read reviews or write a review about the site $DOMAIN$ ",
+		"description": "If the user is on the site, then display this label in a pop-up window under the icon",
+		"placeholders": {
+			"domain" : {
+				"content" : "$1",
+				"example": "https://sites-reviews.com"
+			}
+		}
+	}
+}

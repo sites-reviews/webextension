@@ -39,7 +39,8 @@ module.exports = {
 					output: {
 						beautify: true,
 						indent_level: 2 // eslint-disable-line camelcase
-					}
+					},
+					drop_console: true
 				}
 			})
 		]
@@ -52,5 +53,5 @@ module.exports = {
 				loader: 'babel-loader'
 			}
 		]
-	}
+	},
 };

@@ -1,22 +1,22 @@
 const axios = require('axios');
+const moment = require('moment');
 
 module.exports = {
 
 	domain: null,
+	local_storage_expired_in_seconds: 60 * 60 * 3,
+	api_url: 'https://sites-reviews.com/api/sites/',
 
 	isEmpty: (obj) => {
 
-		if (typeof obj === 'object')
-		{
+		if (typeof obj === 'object') {
 			for (var prop in obj) {
 				if (obj.hasOwnProperty(prop))
 					return false;
 			}
 
 			return true;
-		}
-		else
-		{
+		} else {
 			if (obj === undefined)
 				return true;
 
@@ -32,12 +32,17 @@ module.exports = {
 
 		console.log('getRatingFromServer');
 
-		let response = await axios.get('https://sites-reviews.com/api/sites/' + module.exports.domain);
+		let response = await axios.get(module.exports.api_url + module.exports.domain);
 
 		if (module.exports.isEmpty(response.data.data[0]))
 			return 0;
 		else
-			return response.data.data[0];
+			return {
+				"rating": response.data.data[0].rating,
+				"rating_color": {
+					"hex": response.data.data[0].rating_color.hex
+				}
+			};
 	},
 
 	updateLocalRating: async () => {
@@ -56,7 +61,16 @@ module.exports = {
 		if (promise[module.exports.domain] === undefined)
 			return undefined;
 
-		return promise[module.exports.domain];
+		if (promise[module.exports.domain].timestamp === undefined)
+			return undefined;
+
+		if (module.exports.isExpired(promise[module.exports.domain].timestamp))
+			return undefined;
+
+		if (promise[module.exports.domain].data === undefined)
+			return undefined;
+
+		return promise[module.exports.domain].data;
 	},
 
 	setDomainRating: async (data) => {
@@ -65,7 +79,10 @@ module.exports = {
 
 		let object = {};
 
-		object[module.exports.domain] = data;
+		object[module.exports.domain] = {
+			'data': data,
+			'timestamp': moment().format('X')
+		};
 
 		await browser.storage.local.set(object);
 	},
@@ -76,13 +93,22 @@ module.exports = {
 
 		let data = await module.exports.getRatingFromLocalStorage();
 
-		if (module.exports.isEmpty(data))
-		{
+		if (module.exports.isEmpty(data)) {
 			console.log(data + '  is empty');
 
 			await module.exports.updateLocalRating();
 		}
 
 		return module.exports.getRatingFromLocalStorage();
+	},
+
+	isExpired: (timestamp) => {
+
+		if (timestamp === undefined)
+			return true;
+
+		timestamp = moment(timestamp, 'X');
+
+		return moment().isAfter(timestamp.add(module.exports.local_storage_expired_in_seconds, 'seconds'));
 	}
 };

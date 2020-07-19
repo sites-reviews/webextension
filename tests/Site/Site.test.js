@@ -1,4 +1,4 @@
-const { getDomainRating, setDomainRating } = require('../../source/domain');
+const { getDomainRating, setDomainRating } = require('../../source/site');
 
 beforeEach(() => {
 	browser.geckoProfiler.start.mockClear();

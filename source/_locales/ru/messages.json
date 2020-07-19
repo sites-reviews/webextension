@@ -1,0 +1,22 @@
+{
+	"extensionName": {
+		"message": "Sites-reviews.com - рейтинг и отзывы о сайтах",
+		"description": "Name of the extension."
+	},
+
+	"extensionDescription": {
+		"message": "Показывает в браузере средний рейтинг сайта или компании",
+		"description": "Description of the extension."
+	},
+
+	"clickButtonToReadOrWriteReviews": {
+		"message": "Нажмите сюда, чтобы прочитать отзывы или написать отзыв о сайте $DOMAIN$",
+		"description": "Если пользователь находится на сайте, то отображать эту надпись в всплывающем окне под иконкой",
+		"placeholders": {
+			"domain" : {
+				"content" : "$1",
+				"example": "https://sites-reviews.com"
+			}
+		}
+	}
+}

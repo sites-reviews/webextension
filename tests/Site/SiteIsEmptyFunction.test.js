@@ -1,4 +1,4 @@
-const { isEmpty } = require('../../source/domain');
+const { isEmpty } = require('../../source/site');
 
 describe('isEmpty', () => {
 	it('zero not empty', () => {
