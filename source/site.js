@@ -1,8 +1,7 @@
-import axios from 'axios';
-import moment from 'moment';
+const axios = require('axios');
+const moment = require('moment');
 
 module.exports = {
-
 	domain: null,
 	local_storage_expired_in_seconds: 60 * 60 * 3,
 	api_url: 'https://sites-reviews.com/api/sites/',
@@ -118,6 +117,7 @@ module.exports = {
 			return true;
 
 		timestamp = moment(timestamp, 'X');
+
 
 		return moment().isAfter(timestamp.add(module.exports.local_storage_expired_in_seconds, 'seconds'));
 	}
