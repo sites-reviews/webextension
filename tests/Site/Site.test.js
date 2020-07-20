@@ -1,3 +1,4 @@
+let site = require('../../source/site');
 
 describe('domain variable', () => {
 
@@ -26,34 +27,4 @@ describe('test site functions', () => {
 		expect(value).toEqual('4');
 	});
 });
-
-
-describe('setDomainRating', () => {
-	it('is url set and rating', () => {
-
-		site.setDomainRating();
-
-		expect(browser.storage.local.set).toHaveBeenCalledWith({
-			'https://example.com':  {rating: '4'}
-		});
-	});
-});
-
-/*
-describe('test getRatingFromServer', () => {
-
-	import { fetchData } from './';
-
-	jest.mock('axios');
-
-	it('ok', () => {
-
-		setDomainRating('https://example.com', '4');
-
-		expect(browser.storage.local.set).toHaveBeenCalledWith({
-			'https://example.com':  {rating: '4'}
-		});
-	});
-});
-*/
 

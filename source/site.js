@@ -4,7 +4,7 @@ const moment = require('moment');
 module.exports = {
 	domain: null,
 	local_storage_expired_in_seconds: 60 * 60 * 3,
-	api_url: 'https://sites-reviews.com/api/sites/',
+	api_url: 'https://fsites-reviews.com/api/sites/',
 
 	isEmpty: (obj) => {
 
@@ -36,7 +36,7 @@ module.exports = {
 		return await axios.get(url).then(function (response) {
 
 			if (module.exports.isEmpty(response.data.data[0]))
-				return 0;
+				return false;
 			else
 				return {
 					"rating": response.data.data[0].rating,
@@ -45,8 +45,8 @@ module.exports = {
 					}
 				};
 
-		}).catch(function (error) {
-			console.log(error.message);
+		}).catch(e => {
+			console.log(e.message);
 			return false;
 		});
 	},
@@ -55,31 +55,40 @@ module.exports = {
 
 		console.log('updateLocalRating');
 
-		let data = await module.exports.getRatingFromServer();
+		let rating = await module.exports.getRatingFromServer();
 
-		if (data !== false) {
-			await module.exports.setDomainRating(data);
+		if (rating !== false) {
+			await module.exports.setDomainRating(rating);
 		}
 	},
 
 	getRatingFromLocalStorage: async () => {
 		console.log('getRatingFromLocalStorage');
 
-		let promise = await browser.storage.local.get(module.exports.domain);
+		return browser.storage.local.get(module.exports.domain)
+			.then(result => {
 
-		if (promise[module.exports.domain] === undefined)
-			return undefined;
+				const data = result[module.exports.domain];
 
-		if (promise[module.exports.domain].data === undefined)
-			return undefined;
+				console.log(data);
 
-		if (promise[module.exports.domain].timestamp === undefined)
-			return undefined;
+				if (data === undefined)
+					return undefined;
 
-		if (module.exports.isExpired(promise[module.exports.domain].timestamp))
-			return undefined;
+				if (data.data === undefined)
+					return undefined;
 
-		return promise[module.exports.domain].data;
+				if (data.timestamp === undefined)
+					return undefined;
+
+				if (module.exports.isExpired(data.timestamp))
+					return undefined;
+
+				return data.data;
+			}).catch(e => {
+				console.error(e);
+				return undefined;
+			});
 	},
 
 	setDomainRating: async (data) => {
@@ -90,10 +99,10 @@ module.exports = {
 
 		object[module.exports.domain] = {
 			'data': data,
-			'timestamp': moment().format('X')
+			'timestamp': parseInt(moment().format('X'))
 		};
 
-		await browser.storage.local.set(object);
+		return await browser.storage.local.set(object);
 	},
 
 	loadRatingFromServerIfLocalEmpty: async () => {
@@ -108,7 +117,7 @@ module.exports = {
 			await module.exports.updateLocalRating();
 		}
 
-		return module.exports.getRatingFromLocalStorage();
+		return await module.exports.getRatingFromLocalStorage();
 	},
 
 	isExpired: (timestamp) => {
@@ -117,7 +126,6 @@ module.exports = {
 			return true;
 
 		timestamp = moment(timestamp, 'X');
-
 
 		return moment().isAfter(timestamp.add(module.exports.local_storage_expired_in_seconds, 'seconds'));
 	}
