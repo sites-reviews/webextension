@@ -13,6 +13,13 @@ describe('domain variable', () => {
 	});
 });
 
+describe('api url variable', () => {
+
+	it('default', () => {
+		expect(site.api_url).toEqual('https://sites-reviews.com/api/sites/');
+	});
+});
+
 describe('test site functions', () => {
 
 	let site = require('../../source/site');

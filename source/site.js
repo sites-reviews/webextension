@@ -4,7 +4,7 @@ const moment = require('moment');
 module.exports = {
 	domain: null,
 	local_storage_expired_in_seconds: 60 * 60 * 3,
-	api_url: 'https://fsites-reviews.com/api/sites/',
+	api_url: 'https://sites-reviews.com/api/sites/',
 
 	isEmpty: (obj) => {
 
@@ -31,9 +31,7 @@ module.exports = {
 
 		console.log('getRatingFromServer');
 
-		const url = module.exports.api_url + module.exports.domain;
-
-		return await axios.get(url).then(function (response) {
+		return await axios.get(module.exports.getUrlForApiRequest()).then(function (response) {
 
 			if (module.exports.isEmpty(response.data.data[0]))
 				return false;
@@ -128,5 +126,9 @@ module.exports = {
 		timestamp = moment(timestamp, 'X');
 
 		return moment().isAfter(timestamp.add(module.exports.local_storage_expired_in_seconds, 'seconds'));
+	},
+
+	getUrlForApiRequest: () => {
+		return module.exports.api_url + module.exports.domain;
 	}
 };
