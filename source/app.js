@@ -50,9 +50,7 @@ module.exports = {
 			}
 		}
 
-		browser.browserAction.setTitle({
-			title: ''
-		});
+		badge.setText();
 	},
 
 	onSiteDataReceieved: (data) => {

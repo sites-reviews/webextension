@@ -9,13 +9,12 @@ describe('test onCurrentTabHasChanged', () => {
 		const tabInfo = {'url': 'http://localhost'};
 
 		browser.browserAction.setTitle = jest.fn();
+		badge.setText = jest.fn();
 
 		app.onCurrentTabHasChanged(tabInfo);
 
-		expect(browser.browserAction.setTitle).toBeCalledTimes(1);
-		expect(browser.browserAction.setTitle).toBeCalledWith({
-			title: ''
-		});
+		expect(badge.setText).toBeCalledTimes(1);
+		expect(badge.setText).toBeCalledWith();
 	});
 
 	it('if host is not local', () => {
