@@ -1,5 +1,7 @@
 {
+	"name": "test-project",
 	"private": true,
+	"version": "1.0.1",
 	"scripts": {
 		"lint": "run-p lint:*",
 		"lint:js": "xo",
