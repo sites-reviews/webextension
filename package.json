@@ -1,7 +1,6 @@
 {
-	"name": "test-project",
+	"name": "sites-reviews.com",
 	"private": true,
-	"version": "1.0.1",
 	"scripts": {
 		"lint": "run-p lint:*",
 		"lint:js": "xo",
@@ -46,6 +45,7 @@
 		"xo": "^0.24.0"
 	},
 	"dependencies": {
+		"@babel/polyfill": "^7.10.4",
 		"axios": "^0.19.2",
 		"crx-hotreload": "^1.0.4",
 		"moment": "^2.27.0",

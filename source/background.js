@@ -1,3 +1,5 @@
+require("@babel/polyfill");
+
 let browser = require("webextension-polyfill");
 
 const app = require('./app');
