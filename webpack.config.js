@@ -32,7 +32,16 @@ module.exports = {
 	optimization: {
 		minimizer: [
 			new TerserPlugin({
-				extractComments: true,
+				extractComments: {
+					condition: 'some',
+					filename: (fileData) => {
+						// The "fileData" argument contains object with "filename", "basename", "query" and "hash"
+						return `${fileData.filename}.LICENSE.txt${fileData.query}`;
+					},
+					banner: (licenseFile) => {
+						return `License information can be found in ${licenseFile}`;
+					},
+				},
 				cache: true,
 				parallel: true,
 				sourceMap: true, // Must be set to true if using source-maps in production
