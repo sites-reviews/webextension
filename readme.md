@@ -1,4 +1,4 @@
-# [Sites-reviews.com](Sites-reviews.com) webextension
+# [Sites-reviews.com](https://sites-reviews.com) webextension
 
 > Webextension for Chrome, Firefox, Opera, Edge. 
 
