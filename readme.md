@@ -1,5 +1,7 @@
 # [Sites-reviews.com](https://sites-reviews.com) webextension
 
+[Travis build status](https://api.travis-ci.com/sites-reviews/webextension.svg)
+
 > Webextension for Chrome, Firefox, Opera, Edge. 
 
 ## Features
