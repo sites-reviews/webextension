@@ -43,6 +43,7 @@
 		"@babel/polyfill": "^7.10.4",
 		"axios": "^0.19.2",
 		"crx-hotreload": "^1.0.4",
+		"ip-regex": "^4.1.0",
 		"moment": "^2.27.0",
 		"url-parse": "^1.4.7",
 		"webext-options-sync": "^0.21.2",
