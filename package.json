@@ -41,7 +41,7 @@
 	},
 	"dependencies": {
 		"@babel/polyfill": "^7.10.4",
-		"axios": "^0.19.2",
+		"axios": "^0.21.1",
 		"crx-hotreload": "^1.0.4",
 		"ip-regex": "^4.1.0",
 		"moment": "^2.27.0",
